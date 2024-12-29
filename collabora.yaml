@@ -1,0 +1,57 @@
+name: collabora
+services:
+  collabora:
+    cpu_shares: 90
+    command: []
+    container_name: collabora
+    deploy:
+      resources:
+        limits:
+          memory: 1964M
+    environment:
+      - TZ=Asia/Jakarta
+      - aliasgroup1=https://collabora.domain.com/
+      - dictionaries=es_ES
+      - domain=192.168.x.x
+      - extra_params=--o:ssl.enable=false
+      - password=isi_password
+      - username=collabora
+    hostname: collabora
+    image: collabora/code:latest
+    labels:
+      icon: https://www.collaboraoffice.com/wp-content/uploads/2022/02/collabora-online-sqr.svg
+    ports:
+      - target: 9980
+        published: "9980"
+        protocol: tcp
+    restart: unless-stopped
+    volumes: []
+    devices: []
+    cap_add: []
+    networks:
+      - collabora
+    privileged: false
+networks:
+  collabora:
+    name: collabora
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+  author: Labarta
+  category: Utilities
+  description:
+    en_us: Collabora for CasaOS.
+  hostname: ""
+  icon: https://www.collaboraoffice.com/wp-content/uploads/2022/02/collabora-online-sqr.svg
+  index: /
+  is_uncontrolled: false
+  port_map: "9980"
+  scheme: http
+  store_app_id: collabora
+  tagline:
+    en_us: Provides additional features to CasaOS.
+  title:
+    custom: Collabora
+
+
