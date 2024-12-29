@@ -1,0 +1,114 @@
+name: owncloud
+services:
+  owncloud:
+    cpu_shares: 90
+    command: []
+    container_name: owncloud-server
+    deploy:
+      resources:
+        limits:
+          memory: 1964M
+    environment:
+      - OWNCLOUD_ADMIN_PASSWORD=isi_password
+      - OWNCLOUD_ADMIN_USERNAME=owncloud
+      - OWNCLOUD_DB_HOST=owncloud-db
+      - OWNCLOUD_DB_NAME=owncloud
+      - OWNCLOUD_DB_PASSWORD=owncloud
+      - OWNCLOUD_DB_TYPE=mysql
+      - OWNCLOUD_DB_USERNAME=owncloud
+      - OWNCLOUD_MYSQL_UTF8MB4=true
+      - OWNCLOUD_REDIS_ENABLED=true
+      - OWNCLOUD_REDIS_HOST=redis-own
+      - OWNCLOUD_TRUSTED_DOMAINS=localhost, ip, cloud.domain.com
+    hostname: owncloud-server
+    image: owncloud/server:latest
+    labels:
+      icon: https://icon.casaos.io/main/all/owncloud.png
+    ports:
+      - target: 8080
+        published: "8300"
+        protocol: tcp
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /DATA/AppData/owncloud/files
+        target: /mnt/data
+    devices: []
+    cap_add: []
+    networks:
+      - owncloud-db
+    privileged: false
+  owncloud-db:
+    cpu_shares: 90
+    command: []
+    container_name: owncloud-db
+    deploy:
+      resources:
+        limits:
+          memory: 1964M
+    environment:
+      - MYSQL_DATABASE=owncloud
+      - MYSQL_PASSWORD=owncloud
+      - MYSQL_ROOT_PASSWORD=owncloud
+      - MYSQL_USER=owncloud
+    hostname: owncloud-db
+    image: mariadb:10.11
+    labels:
+      icon: https://icon.casaos.io/main/all/owncloud.png
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /DATA/AppData/owncloud/db
+        target: /var/lib/mysql
+    ports: []
+    devices: []
+    cap_add: []
+    networks:
+      - owncloud-db
+    privileged: false
+  redis-own:
+    cpu_shares: 90
+    command: []
+    container_name: redis-own
+    deploy:
+      resources:
+        limits:
+          memory: 1964M
+    hostname: redis-own
+    image: redis:latest
+    labels:
+      icon: https://icon.casaos.io/main/all/owncloud.png
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /DATA/AppData/owncloud/redis
+        target: /data
+    ports: []
+    devices: []
+    cap_add: []
+    environment: []
+    networks:
+      - owncloud-db
+    privileged: false
+networks:
+  owncloud-db:
+    name: owncloud-db
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+  author: Labarta
+  category: Utilities
+  description:
+    en_us: ownCloud for CasaOS.
+  hostname: ""
+  icon: https://icon.casaos.io/main/all/owncloud.png
+  index: /
+  is_uncontrolled: false
+  port_map: "8300"
+  scheme: http
+  store_app_id: owncloud
+  tagline:
+    en_us: Provides additional features to CasaOS.
+  title:
+    custom: owncloud
