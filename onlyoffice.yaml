@@ -1,0 +1,45 @@
+name: onlyoffice-docs
+services:
+  onlyoffice:
+    container_name: onlyoffice-docs
+    environment:
+      - JWT_ENABLED=true
+      - JWT_HEADER=Authorization
+      - JWT_IN_BODY=true
+      - JWT_SECRET=isi_password
+    image: onlyoffice/documentserver:latest
+    labels:
+      icon: https://icon.casaos.io/main/all/onlyoffice.png
+    ports:
+      - target: 80
+        published: "8500"
+        protocol: tcp
+      - target: 443
+        published: "8543"
+        protocol: tcp
+    restart: unless-stopped
+    stdin_open: true
+    stop_grace_period: 1m0s
+    tty: true
+    volumes:
+      - type: bind
+        source: /DATA/AppData/onlyoffice/data
+        target: /var/www/onlyoffice/Data
+    networks:
+      - onlyoffice
+    privileged: false
+networks:
+  onlyoffice:
+    name: onlyoffice
+x-casaos:
+  author: Labarta
+  category: Utilities
+  hostname: ""
+  icon: https://icon.casaos.io/main/all/onlyoffice.png
+  index: /
+  port_map: "8500"
+  scheme: http
+  store_app_id: onlyoffice-docs
+  title:
+    custom: OnlyOffice-Docs
+
